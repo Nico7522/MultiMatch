@@ -1,0 +1,61 @@
+---
+description: General project rules for the MultiMatch application
+alwaysApply: true
+---
+
+# General rules
+
+## Project context
+- This is MultiMatch: a React application built with Vite and TypeScript.
+- The app lets users add external sports-match page URLs and arrange permitted embeds in a multi-panel dashboard.
+- The MVP is frontend-only. Use LocalStorage for simple local persistence.
+- Use Tailwind CSS for styling, following the conventions already present in the project.
+
+## Keep the implementation simple
+- Prefer the simplest solution that meets the requirement.
+- Use functional React components and hooks.
+- Use TypeScript strict typing; avoid `any`.
+- Create reusable components when they have a clear purpose, but avoid overengineering.
+- Do not add dependencies, a backend, a database, global state tooling, or a UI library without a concrete reason.
+- Inspect the existing code before changing its structure or conventions.
+
+## Match embeds and third-party sites
+- A match URL is an external webpage, not necessarily a direct video URL.
+- Use an iframe only when the external site allows embedding.
+- Never bypass `X-Frame-Options`, CSP `frame-ancestors`, DRM, authentication, paywalls, anti-bot systems, or other site restrictions.
+- Never implement stream extraction, scraping, proxying, header spoofing, or browser automation intended to defeat those restrictions.
+- A site may block iframe embedding. In that case, show a useful explanation and let the user open the original page in a new tab.
+- Do not claim that an arbitrary URL can be embedded or that iframe playback is guaranteed.
+- Do not assume that cross-origin iframe content can be inspected or controlled by the parent app.
+- Do not attempt to control third-party playback, mute state, or player controls through cross-origin DOM access.
+- Keep iframe permissions narrow. Do not grant camera, microphone, geolocation, or unrelated capabilities.
+
+## Validate user input
+- Accept only valid absolute `http:` and `https:` URLs.
+- Reject dangerous or unsupported schemes such as `javascript:`, `data:`, and `file:`.
+- Trim input and show accessible validation feedback.
+- Do not fetch arbitrary user URLs from the browser to test whether they are embeddable; CORS and frame policies make this unreliable.
+- Never inject user-provided values as HTML.
+- When opening an external URL in a new tab, use `rel="noopener noreferrer"`.
+
+## State and persistence
+- Keep match-panel state predictable and typed.
+- Give each match a stable unique ID; do not use array indexes as keys for dynamic lists.
+- Validate LocalStorage content before using it. Handle malformed JSON and storage errors gracefully.
+- Store only non-sensitive preferences and match metadata. Never store passwords, cookies, or session tokens.
+- Do not imply that LocalStorage syncs between devices.
+
+## UI and accessibility
+- Use a responsive CSS Grid layout for the match wall.
+- Support empty, one-panel, and multi-panel states.
+- Provide clear controls to add, remove, resize, and fullscreen a panel when those features are implemented.
+- Use accessible labels for icon-only controls, visible keyboard focus, semantic HTML, and sufficient contrast.
+- Keep the visual design dark, clear, and focused on the video panels.
+- Do not autoplay audio.
+
+## Code changes
+- Keep changes focused and consistent with the repository.
+- Avoid unrelated refactors and unnecessary abstractions.
+- Update or add tests for meaningful logic such as URL validation and LocalStorage parsing.
+- Run the available lint, type-check, test, and build commands after changes when practical.
+- Report checks that were not run; never claim a check passed unless it actually ran.
