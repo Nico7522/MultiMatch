@@ -33,6 +33,13 @@ export function validateMatchUrl(input: string): UrlValidationResult {
     }
   }
 
+  if (!trimmed.includes('jack29')) {
+    return {
+      ok: false,
+      error: 'Le lien doit contenir « jack29 ».',
+    }
+  }
+
   return { ok: true, url: parsed.href }
 }
 
